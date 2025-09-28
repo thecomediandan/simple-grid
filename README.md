@@ -16,6 +16,12 @@ Para desinstalar `angular-cli`, corre:
 npm uninstall -g @angular/cli
 ```
 
+Para limpiar cache, corre:
+
+```bash
+npm cache verify
+```
+
 Para instalar `angular-cli`, corre:
 
 ```bash
