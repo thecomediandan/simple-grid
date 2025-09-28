@@ -9,3 +9,21 @@ Para usar `bun` por defecto en Angular, corre:
 ```bash
 ng config -g cli.packageManager bun
 ```
+
+Para desinstalar `angular-cli`, corre:
+
+```bash
+npm uninstall -g @angular/cli
+```
+
+Para instalar `angular-cli`, corre:
+
+```bash
+npm install -g @angular/cli
+```
+
+o
+
+```bash
+npm install -g @angular/cli@X.Y.Z
+```
