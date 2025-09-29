@@ -14,6 +14,7 @@ export class App{
   protected readonly title = signal('simple-grid');
 
   @ViewChild('gridContainer') gridContainer!: ElementRef;
+  @ViewChild('unionItem') unionCheckbox!: ElementRef;
 
   formControl: FormGroup;
 
@@ -65,6 +66,20 @@ export class App{
   }
 
   onsubmit(): void {
+    if (this.formControl.invalid) {
+      return;
+    }
+    this.numberColumns.set(this.formControl.value.dimx as number);
+    this.numberRows.set(this.formControl.value.dimy as number);
+
+    if (this.unionCheckbox.nativeElement.checked) {
+      console.log("checked");
+      this.union.set(true);
+    }else {
+      console.log("unchecked");
+      this.union.set(false);
+    }
+
     console.log(this.formControl.value);
   }
 }
