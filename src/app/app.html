@@ -8,55 +8,41 @@
       sencilla y rápida.
     </p>
 
-    <form>
+    <form #form class="flex flex-row gap-2 items-center justify-evenly" (ngSubmit)="onsubmit()" [formGroup]="formControl">
       <label for="dimx">Tamaño en X: </label>
-      <select name="dimx" id="dimx">
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3">3</option>
+      <select formControlName="dimx" id="dimx">
+        <option [value]="1">1</option>
+        <option [value]="2">2</option>
+        <option [value]="3">3</option>
+        <option [value]="4">4</option>
+        <option [value]="5">5</option>
+        <option [value]="6">6</option>
+        <option [value]="7">7</option>
+        <option [value]="8">8</option>
+        <option [value]="9">9</option>
+        <option [value]="10">10</option>
       </select>
 
       <label for="dimy">Tamaño en Y: </label>
-      <select name="dimy" id="dimy">
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3">3</option>
+      <select formControlName="dimy" id="dimy">
+        <option [value]="1">1</option>
+        <option [value]="2">2</option>
+        <option [value]="3">3</option>
+        <option [value]="4">4</option>
+        <option [value]="5">5</option>
+        <option [value]="6">6</option>
+        <option [value]="7">7</option>
+        <option [value]="8">8</option>
+        <option [value]="9">9</option>
+        <option [value]="10">10</option>
       </select>
 
+      <button type="submit">Calcular</button>
+
       <label for="union">Unir celdas: </label>
-      <input type="checkbox" name="union" value="false" />
+      <input type="checkbox" formControlName="union" />
     </form>
-    <div class="grid grid-cols-4 gap-4">
-      <div
-        class="bg-amber-400 w-32 h-32 flex flex-column justify-center items-center"
-      >
-        Elemento 1
-      </div>
-      <div
-        class="bg-amber-400 w-32 h-32 flex flex-column justify-center items-center"
-      >
-        Elemento 2
-      </div>
-      <div
-        class="bg-amber-400 w-32 h-32 flex flex-column justify-center items-center"
-      >
-        Elemento 3
-      </div>
-      <div
-        class="bg-amber-400 w-32 h-32 flex flex-column justify-center items-center"
-      >
-        Elemento 4
-      </div>
-      <div
-        class="bg-amber-400 w-32 h-32 flex flex-column justify-center items-center"
-      >
-        Elemento 5
-      </div>
-      <div
-        class="bg-amber-400 w-32 h-32 flex flex-column justify-center items-center"
-      >
-        Elemento 6
-      </div>
+    <div #gridContainer class="grid-container">
     </div>
   </section>
 </main>
