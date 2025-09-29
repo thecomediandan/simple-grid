@@ -13,6 +13,10 @@
   align-items: center;
 }
 
+.grid-item.checked {
+  background-color: #3b82f6; /* bg-blue-500 */
+}
+
 form label {
   font-weight: bold;
 }

@@ -8,8 +8,8 @@
       sencilla y rápida.
     </p>
 
-    <form #form class="flex flex-row gap-2 items-center justify-evenly" (ngSubmit)="onsubmit()" [formGroup]="formControl">
-      <label for="dimx">Tamaño en X: </label>
+    <form #form class="flex flex-row gap-2 items-center justify-evenly" (ngSubmit)="onSubmit()" [formGroup]="formControl">
+      <label for="dimx">Columnas: </label>
       <select formControlName="dimx" id="dimx">
         <option [value]="1">1</option>
         <option [value]="2">2</option>
@@ -23,7 +23,7 @@
         <option [value]="10">10</option>
       </select>
 
-      <label for="dimy">Tamaño en Y: </label>
+      <label for="dimy">Filas: </label>
       <select formControlName="dimy" id="dimy">
         <option [value]="1">1</option>
         <option [value]="2">2</option>
@@ -40,7 +40,7 @@
       <button type="submit">Calcular</button>
 
       <label for="union">Unir celdas: </label>
-      <input #unionItem type="checkbox" formControlName="union" />
+      <input #unionItem type="checkbox" formControlName="union" (change)="onChangeCheckbox()" />
     </form>
     <div #gridContainer class="grid-container">
     </div>
