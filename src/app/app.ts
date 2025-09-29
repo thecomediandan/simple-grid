@@ -13,15 +13,16 @@ import { RouterOutlet } from '@angular/router';
 export class App{
   protected readonly title = signal('simple-grid');
 
-  @ViewChild('gridContainer') gridContainer!: ElementRef;
-  @ViewChild('unionItem') unionCheckbox!: ElementRef;
+  @ViewChild('gridContainer') gridContainer!: ElementRef<HTMLElement>;
+  @ViewChild('unionItem') unionCheckbox!: ElementRef<HTMLInputElement>;
+  @ViewChild('submitButton') submitButton!: ElementRef<HTMLInputElement>;
 
   formControl: FormGroup;
 
   private containerWidth: number = 594;
   numberColumns: number = 4;
   numberRows: number = 4;
-  union: boolean = false;
+  union = signal(false); //false;
   private gap: number = 4;
   private cellSize!: number;
 
@@ -30,7 +31,7 @@ export class App{
     this.formControl = this.formBuilder.group({
     dimx: [`${this.numberColumns}`, [Validators.required, Validators.min(1), Validators.max(10)]],
     dimy: [`${this.numberRows}`, [Validators.required, Validators.min(1), Validators.max(10)]],
-    union: [this.union, [Validators.required]]
+    union: [false, [Validators.required]]
     });
   }
 
@@ -58,7 +59,7 @@ export class App{
     for (let i = 0; i < this.numberColumns * this.numberRows; i++) {
       const cell = this.renderer2.createElement('div');
       this.renderer2.addClass(cell, 'grid-item');
-      if (this.union) {
+      if (this.union()) {
         this.renderer2.addClass(cell, 'checked');
       }
       this.renderer2.setStyle(cell, 'width', `${this.cellSize}px`);
@@ -75,23 +76,42 @@ export class App{
     }
     this.numberColumns = this.formControl.value.dimx as number;
     this.numberRows = this.formControl.value.dimy as number;
-    this.union = this.unionCheckbox.nativeElement.checked as boolean;
+    // this.union = this.unionCheckbox.nativeElement.checked as boolean;
+    this.union.set(false);
+    this.formControl.get('union')?.setValue(this.union());
 
-    // if (this.unionCheckbox.nativeElement.checked as boolean) {
-    //   console.log("checked");
-    //   this.union = true;
-    // }else {
-    //   console.log("unchecked");
-    //   this.union = false;
-    // }
     console.log(this.unionCheckbox);
     console.log(this.formControl.value);
     this.fillGridContainer();
   }
 
+  addCheckedGridItems(): void {
+    const gridItems: HTMLCollection = this.gridContainer.nativeElement.children;
+    for (let i = 0; i < gridItems.length; i++) {
+      if (this.union()) {
+        this.renderer2.addClass(gridItems[i], 'checked');
+      } else {
+        this.renderer2.removeClass(gridItems[i], 'checked');
+      }
+    }
+  }
+
+  toggleEnabledFormItems(): void {
+    if (this.union()) {
+      this.formControl.get('dimx')?.disable();
+      this.formControl.get('dimy')?.disable();
+      this.submitButton.nativeElement.disabled = true;
+    } else {
+      this.formControl.get('dimx')?.enable();
+      this.formControl.get('dimy')?.enable();
+      this.submitButton.nativeElement.disabled = false;
+    }
+  }
+
   onChangeCheckbox(): void {
-    this.union = this.unionCheckbox.nativeElement.checked as boolean;
+    this.union.set(this.unionCheckbox.nativeElement.checked as boolean);
     console.log("changed: ", this.unionCheckbox.nativeElement.checked as boolean);
-    this.fillGridContainer();
+    this.addCheckedGridItems();
+    this.toggleEnabledFormItems();
   }
 }

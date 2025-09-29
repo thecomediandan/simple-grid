@@ -37,11 +37,19 @@
         <option [value]="10">10</option>
       </select>
 
-      <button type="submit">Calcular</button>
+      <button #submitButton type="submit">Calcular</button>
 
       <label for="union">Unir celdas: </label>
       <input #unionItem type="checkbox" formControlName="union" (change)="onChangeCheckbox()" />
     </form>
+
+    @if(union()) {
+      <section class="flex flex-row gap-4 justify-center">
+        <button type="button">Reiniciar</button>
+        <button type="button">Unir</button>
+      </section>
+    }
+
     <div #gridContainer class="grid-container">
     </div>
   </section>
