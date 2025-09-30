@@ -25,6 +25,11 @@ export class App{
   union = signal(false); //false;
   private gap: number = 4;
   private cellSize!: number;
+  private mapArrayGridItems: Array<Array<number>> = [];
+  private selectGridItemStart: number = 0;
+  private selectGridItemEnd: number = 0;
+  private countSelectedGrid: number = 0;
+  private gridItemSelected: number = 0;
 
   constructor(private renderer2: Renderer2, private formBuilder: FormBuilder) {
     // Ideal para inyecciones de dependencias pero no para lógica que dependa del DOM o de los inputs
@@ -62,8 +67,10 @@ export class App{
       if (this.union()) {
         this.renderer2.addClass(cell, 'checked');
       }
-      this.renderer2.setStyle(cell, 'width', `${this.cellSize}px`);
-      this.renderer2.setStyle(cell, 'height', `${this.cellSize}px`);
+      // this.renderer2.setStyle(cell, 'width', `${this.cellSize}px`);
+      // this.renderer2.setStyle(cell, 'height', `${this.cellSize}px`);
+      this.renderer2.setStyle(cell, 'width', `100%`);
+      this.renderer2.setStyle(cell, 'height', `100%`);
       // const text = this.renderer2.createText(`Elemento ${i + 1}`);
       // this.renderer2.appendChild(cell, text);
       this.renderer2.appendChild(this.gridContainer.nativeElement, cell);
@@ -89,11 +96,34 @@ export class App{
     const gridItems: HTMLCollection = this.gridContainer.nativeElement.children;
     for (let i = 0; i < gridItems.length; i++) {
       if (this.union()) {
+        this.prepareGridItems();
         this.renderer2.addClass(gridItems[i], 'checked');
+        const textItem = this.renderer2.listen(gridItems[i], 'click', () => {
+          this.renderer2.appendChild(gridItems[i], document.createTextNode('✅'));
+          this.gridItemSelected = i + 1;
+          this.countSelectedGrid++;
+          this.selectGridItems();
+          textItem(); // Remove listener after first click
+        });
       } else {
         this.renderer2.removeClass(gridItems[i], 'checked');
+        this.renderer2.setProperty(gridItems[i], 'innerHTML', '');
       }
     }
+  }
+
+  prepareGridItems(): void {
+    this.mapArrayGridItems = [];
+    let countItem: number = 1;
+    for (let fil = 0; fil < this.numberRows; fil++) {
+      let row = [];
+      for (let col = 0; col < this.numberColumns; col++) {
+        row.push(countItem);
+        countItem++;
+      }
+      this.mapArrayGridItems.push(row);
+    }
+    console.log(this.mapArrayGridItems);
   }
 
   toggleEnabledFormItems(): void {
@@ -113,5 +143,25 @@ export class App{
     console.log("changed: ", this.unionCheckbox.nativeElement.checked as boolean);
     this.addCheckedGridItems();
     this.toggleEnabledFormItems();
+  }
+
+  selectGridItems(): void {
+    switch (this.countSelectedGrid) {
+      case 1:
+        this.selectGridItemStart = this.gridItemSelected;
+        console.log("start: ", this.selectGridItemStart);
+        break;
+      case 2:
+        this.selectGridItemEnd = this.gridItemSelected;
+        console.log("end: ", this.selectGridItemEnd);
+        // Limpiar variables
+        this.countSelectedGrid = 0;
+        this.selectGridItemStart = 0;
+        this.selectGridItemEnd = 0;
+        this.gridItemSelected = 0;
+        break;
+      default:
+        break;
+    }
   }
 }
